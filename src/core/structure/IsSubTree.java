@@ -25,10 +25,10 @@ public class IsSubTree {
         // 以 节点 A 为根节点的子树 包含树 B ，对应 helper(A, B)；
         // 树 B 是 树 A 左子树 的子结构，对应 isSubStructure(A.left, B)；
         // 树 B 是 树 A 右子树 的子结构，对应 isSubStructure(A.right, B)；
-        return helper(A, B) || isSubStructure(A.left, B) || isSubStructure(A.right, B);
+        return isSameTree(A, B) || isSubStructure(A.left, B) || isSubStructure(A.right, B);
     }
 
-    public boolean helper(TreeNode A, TreeNode B) {
+    public boolean isSameTree(TreeNode A, TreeNode B) {
         /**
          * 描述：终止条件
          * 当节点 B 为空：说明树 B 已遍历完成（越过叶子节点），因此返回 true ；
@@ -45,8 +45,8 @@ public class IsSubTree {
             return false;
         }
 
-        //判断 A 和 B 的左子节点是否相等，即 helper(A.left, B.left) ；
-        //判断 A 和 B 的右子节点是否相等，即 helper(A.right, B.right) ；
-        return helper(A.left, B.left) && helper(A.right, B.right);
+        //判断 A 和 B 的左子节点是否相等，即 isSameTree(A.left, B.left) ；
+        //判断 A 和 B 的右子节点是否相等，即 isSameTree(A.right, B.right) ；
+        return isSameTree(A.left, B.left) && isSameTree(A.right, B.right);
     }
 }

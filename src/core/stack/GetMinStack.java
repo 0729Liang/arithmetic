@@ -5,70 +5,44 @@ import java.util.*;
 public class GetMinStack {
 
     /**
-     * return a array which include all ans for op3
+     * 描述：
+     * 两个栈实现，栈1存放当前数据，最小栈存放与栈1每个元素一一对应的最小找。
+     * 我们只需要设计一个数据结构，使得每个元素 a 与其相应的最小值 m 时刻保持一一对应。
+     * 因此我们可以使用一个最小栈，与元素栈同步插入与删除，用于存储与每个元素对应的最小值。
      *
-     * @param op int整型二维数组 operator
-     * @return int整型一维数组
+     * 当一个元素要入栈时，我们取当前最小栈的栈顶存储的最小值，与当前元素比较得出最小值，将这个最小值插入最小栈中；
+     * 当一个元素要出栈时，我们把最小栈的栈顶元素也一并弹出；
+     * 在任意一个时刻，栈内元素的最小值就存储在最小栈的栈顶元素中。
+     *
      */
-    public int[] getMinStack(int[][] op) {
-        MyStack stack = new MyStack();
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < op.length; i++) {
-            if (op[i][0] == 1){
-                stack.push(op[i][1]);
-            }else if (op[i][0] == 2){
-                stack.pop();
-            }else if (op[i][0] == 3){
-                list.add(stack.getMin());
-            }
-        }
-        int[] arr = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            arr[i]=list.get(i);
-        }
-        return arr;
-    }
+    class MinStack {
 
+        Deque<Integer> mStack; // 栈1
+        Deque<Integer> minStack; // 最小栈
 
-    interface IStack {
-        void push(int value);
-
-        Integer pop();
-
-        Integer getMin();
-    }
-
-    private class MyStack implements IStack {
-
-        private Deque<Integer> mStack;
-        private int min = Integer.MAX_VALUE;
-
-        public MyStack() {
-            mStack = new ArrayDeque<>();
+        /** initialize your data structure here. */
+        public MinStack() {
+            mStack = new LinkedList<>();
+            minStack = new LinkedList<>();
+            minStack.push(Integer.MAX_VALUE); // 需要先初始化一个默认值，防止取出空
         }
 
-        @Override
-        public void push(int value) {
-            mStack.push(value);
-            min = Math.min(value, min);
+        public void push(int x) {
+            mStack.push(x);
+            minStack.push(Math.min(minStack.peek(),x));
         }
 
-        @Override
-        public Integer pop() {
-            Integer res = mStack.pop();
-            if (res != min) {
-                return res;
-            }
-            min = Integer.MAX_VALUE;
-            for (Integer item : mStack) {
-                min = Math.min(min, item);
-            }
-            return res;
+        public void pop() {
+            mStack.pop();
+            minStack.pop();
         }
 
-        @Override
-        public Integer getMin() {
-            return min;
+        public int top() {
+            return mStack.peek();
+        }
+
+        public int getMin() {
+            return minStack.peek();
         }
     }
 }
