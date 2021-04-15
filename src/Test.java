@@ -1,102 +1,45 @@
-import java.util.Hashtable;
+import java.util.*;
 
 public class Test {
-    static class Animal
-    {
-        public void eat()
-        {
-            System.out.println("父类的 eating...");
+    public static void main(String[] args) {
+        System.out.println(longestPalindrome("aba"));
+    }
+
+    public static  String longestPalindrome(String s) {
+        String res="";
+        for(int i=0; i< s.length(); i++){
+            // 比较以i为中心扩散的回文子串 和 以i和i+1为中心扩散的回文子串， 哪个子串长取哪个
+            String odd = centerSpread(s,i,i+1); // 偶数回文串,abba
+            String even = centerSpread(s,i,i); // 奇数回文串,aba
+            // 找出本轮最长的字符串
+            String str = (odd.length() > even.length())?odd:even;
+            // 记录历史最长的字符串
+            if (str.length() > res.length()){
+                res = str;
+            }
         }
+        return res;
     }
 
-    static class Bird extends Animal{
-        private int aa=10;
-
-        public Bird(int aa) {
-            this.aa = aa;
+    // 中心扩散法
+    //若left==right 则扩散中点为一个，此时的回文子串为奇数
+    //若left!=right，则扩散的中点为 left和right，此时的回文子串为偶数
+    public static String centerSpread(String s,int left,int right){
+        int length = s.length();
+        // 控制指针范围，防止越界
+        while((left >= 0 && left < length ) && (right >= 0 && right < length )){
+            if (s.charAt(left) == s.charAt(right)){
+                left--;
+                right++;
+            }else{
+                break;
+            }
         }
-        @Override
-        public void eat()
-        {
-            System.out.println("子类重写的父类的  eatting..."+aa);
-        }
-        public void fly()
-        {
-            System.out.println("子类新方法  flying..."+aa);
-        }
-    }
-
-    public static class Human
-    {
-        public void sleep()
-        {
-            System.out.println("父类人类   sleep..");
-        }
-    }
-    static class Male extends Human
-    {
-        @Override
-        public void sleep()
-        {
-            System.out.println("男人 sleep..");
-        }
-    }
-    static class Female extends Human
-    {
-        @Override
-        public void sleep()
-        {
-            System.out.println("女人 sleep..");
-        }
-    }
-
-    /**
-     * 描述:
-     */
-    public static void eat(Animal a){
-        a.eat();
-        eat2(a);
-    }
-
-    public static void eat2(Animal a){
-        a.eat();
-    }
-
-
-    public static void sleep(Human h)//方法的参数是父类------！！！
-    {
-        h.sleep();
-    }
-
-
-    public static void main(String[] args)
-    {
-        Animal b=new Bird(2); //向上转型
-        System.out.println(b instanceof  Bird);
-        b.eat();
-        eat(b);
-        ((Bird) b).fly();
-        Bird b2 = ((Bird) b);
-        eat(b2);
-        b2.fly();
-//          b.fly(); //b虽指向子类对象，但此时子类作为向上的代价丢失和父类不同的fly()方法
-        sleep(new Male());
-        sleep(new Female());//传入的参数是子类-----！！
-
-        AA aa = new BB();
-        aa.show();
-    }
-
-
-    abstract static class AA {
-        public static void show() {
-            System.out.println("aa");
-        }
-    }
-
-    static class BB extends AA {
-        public static void show() {
-            System.out.println("bb");
-        }
+        //上面while循环终止了，此时s.charAt(left) != s.charAt(right)
+        //所以此时的回文子串的左右边界其实是  l-1，  r-1
+        //substring左闭右开
+        // int length = right-left-2+1;
+        System.out.println("left:"+left+" right:"+right);
+        return s.substring(left+1,right);
     }
 }

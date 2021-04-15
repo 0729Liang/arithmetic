@@ -29,7 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AlternateFooBar {
 
     // 法1：synchronized
-    class FooBar {
+    static class FooBar {
         private int n;
         private volatile boolean runFoo = true; // true 打印foo，false打印bar
         private final Object mObject = new Object();
@@ -42,7 +42,7 @@ public class AlternateFooBar {
 
             for (int i = 0; i < n; i++) {
                 synchronized (mObject) {
-                    while (!runFoo) {
+                    if (!runFoo) {
                         mObject.wait();
                     }
                     printFoo.run();
@@ -56,7 +56,7 @@ public class AlternateFooBar {
 
             for (int i = 0; i < n; i++) {
                 synchronized (mObject) {
-                    while (runFoo) {
+                    if (runFoo) {
                         mObject.wait();
                     }
                     printBar.run();
