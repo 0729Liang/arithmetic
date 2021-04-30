@@ -152,7 +152,6 @@ public class AlternateFooBar {
             this.n = n;
         }
 
-
         private volatile boolean runFoo = true;
         private ReentrantLock mLock = new ReentrantLock();
         private Condition fooCondition = mLock.newCondition();
