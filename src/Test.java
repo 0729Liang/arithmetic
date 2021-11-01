@@ -1,8 +1,34 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Test {
     public static void main(String[] args) {
-        System.out.println(longestPalindrome("aba"));
+//        System.out.println(longestPalindrome("aba"));
+        int[] arr = {1,2,3,4,5,6};
+        int target = 7;
+        System.out.println(find(arr,target));
+    }
+    
+    public static List<List<Integer>> find(int[] arr,int target){
+        HashMap<Integer,Integer> map = new HashMap<>(); // key=arr[i] value=i
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        for(int i=0; i<arr.length; i++){
+            int tmp = target - arr[i];
+            if (map.containsKey(tmp)){
+                // 添加index
+                list.add(i);
+                list.add(map.get(tmp));
+                result.add(new ArrayList<>(list));
+                // 移除index对应的key
+                map.remove(arr[i]);
+                map.remove(tmp);
+                // 清空临时数据
+                list.clear();
+            }
+            map.put(arr[i],i);// key=arr[i] value=i
+        }
+        return result;
     }
 
     public static  String longestPalindrome(String s) {
