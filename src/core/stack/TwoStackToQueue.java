@@ -1,5 +1,6 @@
 package core.stack;
 
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -12,52 +13,46 @@ import java.util.Stack;
  */
 public class TwoStackToQueue {
     /**
-     * 用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。
-     * 解题思路：栈是先入后出，队列是先入先出
-     * 入栈：临时栈用于存储传入的数据，其栈内顺序与输入顺序相反
-     * 出栈：将临时栈的输入全部取出，放入栈2，栈2的顺序与输入顺序相同，正常出栈即打到了队列的效果
-     */
-    class MyQueue {
+      * 描述：
+      * 两个栈实现，栈1存放当前数据，最小栈存放与栈1每个元素一一对应的最小找。
+      * 我们只需要设计一个数据结构，使得每个元素 a 与其相应的最小值 m 时刻保持一一对应。
+      * 因此我们可以使用一个最小栈，与元素栈同步插入与删除，用于存储与每个元素对应的最小值。
+      * 
+      * 当一个元素要入栈时，我们取当前最小栈的栈顶存储的最小值，与当前元素比较得出最小值，将这个最小值插入最小栈中；
+      * 当一个元素要出栈时，我们把最小栈的栈顶元素也一并弹出；
+      * 在任意一个时刻，栈内元素的最小值就存储在最小栈的栈顶元素中。
+      *
+      */
+    class MinStack {
         Stack<Integer> mStack;
-        Stack<Integer> mTmpStack;
+        Stack<Integer> mMinStack;
 
-        /** Initialize your data structure here. */
-        public MyQueue() {
+        public MinStack() {
             mStack = new Stack<>();
-            mTmpStack = new Stack<>();
+            mMinStack = new Stack<>();
         }
 
-        // 将临时栈的数据同步给栈2
-        public void syncStack(){
-            // * 如果栈2空了，才需要将临时栈的数据同步给栈2，否则先使用栈2的数据
-            if (mStack.isEmpty()){
-                while(!mTmpStack.isEmpty()){
-                    mStack.push(mTmpStack.pop());
-                }
+        public void push(int val) {
+            mStack.push(val);
+            if (mMinStack.isEmpty()) {
+                mMinStack.push(val);
+            } else {
+                // 非空，存入最小值
+                mMinStack.push(Math.min(mMinStack.peek(), val));
             }
         }
 
-        /** Push element x to the back of queue. */
-        public void push(int x) {
-            // 临时栈存放push的数据，pop或peek时，先将临时栈的数据取出并压入栈2，再进行pop或peek即可
-            mTmpStack.push(x);
+        public void pop() {
+            mStack.pop();
+            mMinStack.pop();
         }
 
-        /** Removes the element from in front of queue and returns that element. */
-        public int pop() {
-            syncStack();
-            return mStack.pop();
-        }
-
-        /** Get the front element. */
-        public int peek() {
-            syncStack();
+        public int top() {
             return mStack.peek();
         }
 
-        /** Returns whether the queue is empty. */
-        public boolean empty() {
-            return mTmpStack.isEmpty() && mStack.isEmpty();
+        public int getMin() {
+            return mMinStack.peek();
         }
     }
 }

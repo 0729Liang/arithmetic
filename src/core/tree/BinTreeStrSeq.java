@@ -1,4 +1,4 @@
-package core.structure;
+package core.tree;
 
 import core.been.TreeNode;
 

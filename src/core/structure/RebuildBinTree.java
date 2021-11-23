@@ -20,7 +20,7 @@ public class RebuildBinTree {
 
         TreeNode root = new RebuildBinTree().buildTree(pres, ins);
         System.out.println(new BinTreeSeq().levelOrder(root));
-        System.out.println(new BinTreeSeq().levelOrder2(root));
+        System.out.println(new BinTreeSeq().levelOrderContainNull(root));
     }
 
     Map<Integer, Integer> midMap = new HashMap<>();// 记录中序遍历的数据，k=数组中具体的值，v=数组中此值的索引
@@ -34,6 +34,8 @@ public class RebuildBinTree {
         // 先序、先序遍历的右指针初始值是length - 1，如果是length则越界
         return rebuild(preorder, 0, length - 1, 0, length - 1);
     }
+
+
 
     /**
      * 描述：递归重建二叉树
